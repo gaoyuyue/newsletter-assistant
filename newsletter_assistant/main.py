@@ -7,8 +7,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from langchain.chains import StuffDocumentsChain, LLMChain, AnalyzeDocumentChain
 from langchain_community.chat_models import ChatOllama
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
+from langchain_core.prompts import PromptTemplate
 
 from newsletter_assistant.connection_manager import ConnectionManager
 from newsletter_assistant.rss import RSSFeedLoader
@@ -59,13 +58,6 @@ def main():
 
 CONCISE SUMMARY:"""
     summary_prompt = PromptTemplate.from_template(prompt_template)
-    translate_prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", "You are a translator with vast knowledge of human languages. Please translate the following "
-                       "from english to chinese"),
-            ("human", "{text}"),
-        ]
-    )
     llm_chain = LLMChain(llm=llm, prompt=summary_prompt)
     stuff_chain = StuffDocumentsChain(
         llm_chain=llm_chain,
@@ -74,13 +66,7 @@ CONCISE SUMMARY:"""
     )
     summarize_document_chain = AnalyzeDocumentChain(combine_docs_chain=stuff_chain)
 
-    chain = (summarize_document_chain
-             | {
-                 "text": lambda resp: resp["output_text"]
-             }
-             | translate_prompt
-             | llm
-             | StrOutputParser())
+    chain = (summarize_document_chain | (lambda resp: resp["output_text"]))
 
     for feed in config["feeds"]:
         loader = RSSFeedLoader(urls=[feed["url"]], text_mode=False)
