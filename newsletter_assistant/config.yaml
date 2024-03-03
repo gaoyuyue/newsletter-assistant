@@ -1,0 +1,5 @@
+feeds:
+  - url: https://tech.meituan.com/feed/
+    content_selector: "div.post-content"
+  - url: https://feed.infoq.com/
+    content_selector: "div.article__content"

@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "newsletter-assistant"
+version = "0.1.0"
+description = ""
+authors = ["Yuyue Gao <yuyue.gao@thoughtworks.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+newspaper3k = "^0.2.8"
+langchain = "^0.1.5"
+python-dotenv = "^1.0.1"
+bs4 = "^0.0.2"
+
+
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+priority = "primary"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
